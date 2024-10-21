@@ -22,6 +22,7 @@ return new class extends Migration
             $table->decimal('price', 8, 2);          
             $table->enum('meal_type', ['Event Meal', 'Daily Menu Meal', 'Both']); 
             $table->String('category');
+            $table->decimal('discount', 5, 2)->nullable();
             $table->timestamps();
         });
     }

@@ -18,7 +18,8 @@ class Meal extends Model
         'meal_image',
         'price',
         'meal_type',
-        'category',
+        'category', 
+        'discount', 
     ];
 
     protected $casts = [
@@ -29,5 +30,10 @@ class Meal extends Model
     public function kitchen()
     {
         return $this->belongsTo(Kitchen::class);
+    }
+
+    public function orders()
+    {
+        return $this->belongsToMany(Order::class)->withPivot('quantity');
     }
 }
