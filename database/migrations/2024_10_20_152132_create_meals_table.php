@@ -13,12 +13,13 @@ return new class extends Migration
     {
         Schema::create('meals', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('kitchen_id')->constrained()->onDelete('cascade'); // Foreign key to link the kitchen
+            $table->foreignId('kitchen_id')->constrained('kitchens')->onDelete('cascade'); // Foreign key to link the kitchen
             $table->string('meal_name');              
             $table->text('meal_description')->nullable();         
             $table->json('ingredients');              
             $table->string('main_ingredient');       
             $table->string('meal_image')->nullable(); 
+            // may make a issue with the price on the frontend
             $table->decimal('price', 8, 2);          
             $table->enum('meal_type', ['Event Meal', 'Daily Menu Meal', 'Both']); 
             $table->String('category');
