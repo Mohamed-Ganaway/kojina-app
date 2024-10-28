@@ -32,9 +32,11 @@ class Kitchen extends Model
         return $this->hasMany(Meal::class);
     }
 
-    public function favoritedByUsers()
-{
-    return $this->belongsToMany(User::class, 'favorite_kitchens');
-}
+  // Kitchen.php
+  public function usersWhoFavorited()
+  {
+      return $this->belongsToMany(User::class, 'favorite_kitchens');
+  }
+  
 
 }

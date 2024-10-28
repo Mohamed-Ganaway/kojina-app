@@ -84,8 +84,8 @@ class MealController extends Controller
     $path = $request->file('meal_image')->store('meals/images', 'public');
     $url = Storage::url($path);
 
-    Meal::where('id', $meal_id)->update(['image_url' => $url]);
-    return response()->json(['meal_image_url' => $url], 201);
+    Meal::where('id', $meal_id)->update(['meal_image' => $url]);
+    return response()->json(['meal_image uploaded' => $url], 201);
 }
 
 }
