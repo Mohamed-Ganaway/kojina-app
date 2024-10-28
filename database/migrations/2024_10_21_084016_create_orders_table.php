@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Relationship with user
             $table->foreignId('location_id')->constrained()->onDelete('cascade'); // Relationship with location
-            $table->enum('type', ['daily', 'event']); // Type of order
+            $table->string('type'); // Ensure this exists and is set to NOT NULL
             $table->enum('status', ['pending', 'accepted', 'declined'])->default('pending'); // Order status
             $table->timestamps();
         });

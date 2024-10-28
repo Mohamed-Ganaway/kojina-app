@@ -69,13 +69,15 @@ class AuthController extends Controller
         ]);
     }
 
-    public function refresh(){
-        $token = auth()->refresh(); 
+    public function refresh()
+{
+    $newToken = auth()->refresh();
 
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in'=> auth()->factory()->getTTL() * 60
-        ]);
-    }
+    return response()->json([
+        'access_token' => $newToken,
+        'token_type' => 'bearer',
+        'expires_in' => auth()->factory()->getTTL() * 60
+    ]);
+}
+
 }

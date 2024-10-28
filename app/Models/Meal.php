@@ -36,4 +36,9 @@ class Meal extends Model
     {
         return $this->belongsToMany(Order::class)->withPivot('quantity');
     }
+
+    public function favoritedByUsers()
+    {
+        return $this->belongsToMany(User::class, 'favorite_meals');
+    }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\Location;
+use App\Models\Meal;
 
 
 class OrderController extends Controller
@@ -34,7 +35,8 @@ class OrderController extends Controller
     $order = Order::create([
         'user_id' => auth()->id(),
         'location_id' => $location->id,
-        'order_type' => 'daily', // Assuming you have an order_type column in the orders table
+        'type' => $request->type,
+        'status' => 'pending',
     ]);
 
     // Attach meals to the order
@@ -51,29 +53,51 @@ class OrderController extends Controller
 
     // Store an event order
     public function storeEventOrder(Request $request)
-    {
-        $request->validate([
-            'main_course' => 'required|exists:meals,id',
-            'pastries' => 'nullable|exists:meals,id',
-            'salads' => 'nullable|exists:meals,id',
-            'desserts' => 'nullable|exists:meals,id',
-            'location_id' => 'required|exists:locations,id',
-        ]);
+{
+    // Validate the request data
+    $validatedData = $request->validate([
+        'kitchen_id' => 'required|exists:kitchens,id',
+        'location_id' => 'required|exists:locations,id',
+        'taste_box' => 'boolean',
+        'main_course' => 'array|required',
+        'main_course.*.meal_id' => 'required|exists:meals,id',
+        'main_course.*.quantity' => 'required|integer|min:1',
+        'pastries' => 'array',
+        'pastries.*.meal_id' => 'required|exists:meals,id',
+        'pastries.*.quantity' => 'required|integer|min:1',
+    ]);
 
-        $order = auth()->user()->orders()->create([
-            'type' => 'event',
-            'location_id' => $request->location_id,
-            'status' => 'pending',
-        ]);
+    // Extract meal IDs for main course and pastries
+    $mainCourseIds = collect($request->main_course)->pluck('meal_id');
+    $pastriesIds = collect($request->pastries)->pluck('meal_id');
 
-        // Attach meals to the event order
-        $order->meals()->attach($request->main_course);
-        if ($request->pastries) $order->meals()->attach($request->pastries);
-        if ($request->salads) $order->meals()->attach($request->salads);
-        if ($request->desserts) $order->meals()->attach($request->desserts);
+    // Fetch meals from the database
+    $mainCourses = Meal::whereIn('id', $mainCourseIds)->get();
+    $pastries = Meal::whereIn('id', $pastriesIds)->get();
 
-        return response()->json(['message' => 'Event order placed successfully']);
+    // Create the order
+    $order = Order::create([
+        'user_id' => auth()->id(),
+        'kitchen_id' => $request->kitchen_id,
+        'location_id' => $request->location_id,
+        'type' => 'event',
+        'status' => 'pending',
+        'taste_box' => $request->taste_box ?? false,
+    ]);
+
+    // Attach meals to the order with their quantities
+    foreach ($request->main_course as $meal) {
+        $order->meals()->attach($meal['meal_id'], ['quantity' => $meal['quantity']]);
     }
+    foreach ($request->pastries as $meal) {
+        $order->meals()->attach($meal['meal_id'], ['quantity' => $meal['quantity']]);
+    }
+
+    return response()->json([
+        'message' => 'Event order placed successfully!',
+        'order' => $order
+    ], 201);
+}
 
     // Update order status (for kitchen admin or system)
     public function updateStatus(Request $request, $id)

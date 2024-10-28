@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Meal;
 use App\Models\Kitchen;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class MealController extends Controller
 {
@@ -76,4 +77,15 @@ class MealController extends Controller
             'message' => 'Meal deleted successfully',
         ]);
     }
+
+    public function uploadMealImage(Request $request, $meal_id)
+{
+    $request->validate(['meal_image' => 'required|image|mimes:jpg,png,jpeg|max:2048']);
+    $path = $request->file('meal_image')->store('meals/images', 'public');
+    $url = Storage::url($path);
+
+    Meal::where('id', $meal_id)->update(['image_url' => $url]);
+    return response()->json(['meal_image_url' => $url], 201);
+}
+
 }

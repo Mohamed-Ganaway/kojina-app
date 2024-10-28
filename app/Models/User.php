@@ -66,5 +66,15 @@ public function cartItems()
     return $this->hasMany(CartItem::class); // Assuming 'CartItem' is the name of your cart items model
 }
 
+public function favoriteKitchens()
+{
+    return $this->belongsToMany(Kitchen::class, 'favorite_kitchens');
+}
+
+
+    public function favoriteMeals()
+    {
+        return $this->belongsToMany(Meal::class, 'favorite_meals');
+    }
 
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Kitchen;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class KitchenController extends Controller
 {
@@ -70,4 +71,45 @@ class KitchenController extends Controller
             'message' => 'Kitchen deleted successfully',
         ]);
     }
+
+    public function show($id)
+    {
+        $kitchen = Kitchen::find($id);
+
+        if (!$kitchen) {
+            return response()->json(['message' => 'Kitchen not found'], 404);
+        }
+
+        return response()->json($kitchen);
+    }
+
+    public function uploadProfileImage(Request $request, $kitchen)
+    {
+        $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        $kitchen = Kitchen::findOrFail($kitchen);
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('public/kitchens');
+            $kitchen->profile_image = Storage::url($path);
+            $kitchen->save();
+        }
+
+        return response()->json(['message' => 'Profile image uploaded successfully.', 'url' => $kitchen->profile_image]);
+    }
+
+
+
+public function uploadCoverImage(Request $request, $kitchen_id)
+{
+    $request->validate(['cover_image' => 'required|image|mimes:jpg,png,jpeg|max:2048']);
+    $path = $request->file('cover_image')->store('kitchens/cover_images', 'public');
+    $url = Storage::url($path);
+
+    Kitchen::where('id', $kitchen_id)->update(['cover_image' => $url]);
+    return response()->json(['cover_image uploaded successfuly' => $url], 201);
+}
+
 }
