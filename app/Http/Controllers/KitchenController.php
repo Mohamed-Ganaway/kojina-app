@@ -50,8 +50,8 @@ class KitchenController extends Controller
             'cover_image' => 'nullable|string',
             'location' => 'string',
             'categories' => 'array',
-            'opening_time' => 'required',
-            'closing_time' => 'required',
+            'opening_time' => 'nullable',
+            'closing_time' => 'nullable',
             'rating' => 'nullable|numeric|min:0|max:5',
         ]);
 
