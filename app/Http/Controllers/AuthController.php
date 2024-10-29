@@ -71,7 +71,7 @@ class AuthController extends Controller
 
     public function refresh()
 {
-    $newToken = auth()->refresh();
+    $newToken = auth()->refresh(true,true);
 
     return response()->json([
         'access_token' => $newToken,
