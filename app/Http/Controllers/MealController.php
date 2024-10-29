@@ -81,7 +81,7 @@ class MealController extends Controller
     public function uploadMealImage(Request $request, $meal_id)
 {
     $request->validate(['meal_image' => 'required|image|mimes:jpg,png,jpeg|max:2048']);
-    $path = $request->file('meal_image')->store('meals/images', 'public');
+    $path = $request->file('meal_image')->store('images/meals', 'public');
     $url = Storage::url($path);
 
     Meal::where('id', $meal_id)->update(['meal_image' => $url]);
