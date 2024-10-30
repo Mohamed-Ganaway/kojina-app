@@ -88,7 +88,7 @@ class MealController extends Controller
         $meal = $kitchen->meals()->findOrFail($meal_id); 
     
         if ($request->hasFile('meal_image')) {
-            $path = $request->file('meal_image')->store('meals/images', 'public');
+            $path = $request->file('meal_image')->store('images/meals', 'public');
             $meal->meal_image = Storage::url($path); 
             $meal->save();
         }
