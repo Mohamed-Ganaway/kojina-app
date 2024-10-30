@@ -12,7 +12,7 @@ class MealController extends Controller
     // List all meals for a specific kitchen
     public function index($kitchenId)
     {
-        $kitchen = Kitchen::findOrFail($kitchenId);
+        $kitchen = Kitchen::findOrFail($kitchenId);     
         $meals = $kitchen->meals;
         return response()->json($meals);
     }
@@ -88,7 +88,7 @@ class MealController extends Controller
         $meal = $kitchen->meals()->findOrFail($meal_id); 
     
         if ($request->hasFile('meal_image')) {
-            $path = $request->file('meal_image')->store('kitchens/meal_images', 'public');
+            $path = $request->file('meal_image')->store('meals/images', 'public');
             $meal->meal_image = Storage::url($path); 
             $meal->save();
         }
