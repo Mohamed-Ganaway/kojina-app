@@ -84,21 +84,22 @@ class KitchenController extends Controller
     }
 
     public function uploadProfileImage(Request $request, $kitchen)
-    {
-        $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
+{
+    $request->validate([
+        'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+    ]);
 
-        $kitchen = Kitchen::findOrFail($kitchen);
+    $kitchen = Kitchen::findOrFail($kitchen);
 
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('public/kitchens');
-            $kitchen->profile_image = Storage::url($path);
-            $kitchen->save();
-        }
-
-        return response()->json(['message' => 'Profile image uploaded successfully.', 'url' => $kitchen->profile_image]);
+    if ($request->hasFile('image')) {
+        $path = $request->file('image')->store('kitchens/profile_images', 'public');
+        $kitchen->profile_image = Storage::url($path);
+        $kitchen->save();
     }
+
+    return response()->json(['message' => 'Profile image uploaded successfully.', 'url' => $kitchen->profile_image]);
+}
+
 
 
 
