@@ -78,14 +78,23 @@ class MealController extends Controller
         ]);
     }
 
-    public function uploadMealImage(Request $request, $meal_id)
-{
-    $request->validate(['meal_image' => 'required|image|mimes:jpg,png,jpeg|max:2048']);
-    $path = $request->file('meal_image')->store('images/meals', 'public');
-    $url = Storage::url($path);
-
-    Meal::where('id', $meal_id)->update(['meal_image' => $url]);
-    return response()->json(['meal_image uploaded' => $url], 201);
-}
+    public function uploadMealImage(Request $request, $kitchen_id, $meal_id)
+    {
+        $request->validate([
+            'meal_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+    
+        $kitchen = Kitchen::findOrFail($kitchen_id);
+        $meal = $kitchen->meals()->findOrFail($meal_id); 
+    
+        if ($request->hasFile('meal_image')) {
+            $path = $request->file('meal_image')->store('kitchens/meal_images', 'public');
+            $meal->meal_image = Storage::url($path); 
+            $meal->save();
+        }
+    
+        return response()->json(['message' => 'Meal image uploaded successfully.', 'url' => $meal->meal_image]);
+    }
+    
 
 }
