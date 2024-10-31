@@ -97,9 +97,10 @@ class MealController extends Controller
         return response()->json(['message' => 'Meal image uploaded successfully.', 'url' => $meal->meal_image]);
     }
 
-    public function getMealsByCategory($category)
+    public function getMealsByCategory(Request $request)
 {    
-    Log::info('Category route accessed with category: ' . $category);
+    $category = $request->query('category');
+    Log::info('Category fetched as: ' . $category);
     
     // Define allowed categories
     $allowedCategories = ['وجبات رئيسية', 'مشروبات', 'حلويات', 'مقبلات'];
