@@ -97,9 +97,8 @@ class MealController extends Controller
         return response()->json(['message' => 'Meal image uploaded successfully.', 'url' => $meal->meal_image]);
     }
 
-    public function getMealsByCategory(Request $request)
+    public function getMealsByCategory(String $category)
 {    
-    $category = $request->query('category');
     Log::info('Category fetched as: ' . $category);
     
     
