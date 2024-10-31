@@ -78,7 +78,9 @@ Route::middleware('auth:api')->group(function(){
         Route::delete('/{id}', [LocationController::class, 'destroy']);
     });
 
-    Route::get('/meals/category/{category}', [MealController::class, 'getMealsByCategory']);
+    Route::get('meals/category', [MealController::class, 'getMealsByCategory']);
+
+
 
     
 });

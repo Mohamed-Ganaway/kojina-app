@@ -6,6 +6,7 @@ use App\Models\Meal;
 use App\Models\Kitchen;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class MealController extends Controller
 {
@@ -97,7 +98,9 @@ class MealController extends Controller
     }
 
     public function getMealsByCategory($category)
-{
+{    
+    Log::info('Category route accessed with category: ' . $category);
+    
     // Define allowed categories
     $allowedCategories = ['وجبات رئيسية', 'مشروبات', 'حلويات', 'مقبلات'];
 
