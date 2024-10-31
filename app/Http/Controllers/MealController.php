@@ -99,7 +99,7 @@ class MealController extends Controller
 
     public function getMealsByCategory(Request $request)
 {    
-    $category = $request->query('category');
+    $category = $request->input('category');
     Log::info('Category fetched as: ' . $category);
     
     
