@@ -95,6 +95,27 @@ class MealController extends Controller
     
         return response()->json(['message' => 'Meal image uploaded successfully.', 'url' => $meal->meal_image]);
     }
+
+    public function getMealsByCategory($category)
+{
+    // Define allowed categories
+    $allowedCategories = ['وجبات رئيسية', 'مشروبات', 'حلويات', 'مقبلات'];
+
+    // Validate the category
+    if (!in_array($category, $allowedCategories)) {
+        return response()->json([
+            'error' => 'Invalid category selected.'
+        ], 422);
+    }
+
+    // Retrieve meals by category across all kitchens
+    $meals = Meal::where('category', $category)
+                 ->with('kitchen')
+                 ->paginate(10);
+
+    return response()->json($meals);
+}
+
     
 
 }

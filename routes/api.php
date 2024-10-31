@@ -41,7 +41,8 @@ Route::middleware('auth:api')->group(function(){
         Route::post('/', [MealController::class, 'store']);      // Create a new meal for a kitchen
         Route::put('/{meal_id}', [MealController::class, 'update']);  // Update an existing meal
         Route::delete('/{meal_id}', [MealController::class, 'destroy']); 
-        Route::post('/{id}/uploadMealImage', [MealController::class, 'uploadMealImage']);// Delete a meal
+        Route::post('/{id}/uploadMealImage', [MealController::class, 'uploadMealImage']);// upload meal image
+        
     });
 
     Route::middleware('auth:api')->group(function () {
@@ -76,6 +77,9 @@ Route::middleware('auth:api')->group(function(){
         Route::put('/{id}', [LocationController::class, 'update']); 
         Route::delete('/{id}', [LocationController::class, 'destroy']);
     });
+
+    Route::get('/meals/category/{category}', [MealController::class, 'getMealsByCategory']);
+
     
 });
 
