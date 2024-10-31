@@ -103,7 +103,7 @@ class MealController extends Controller
     Log::info('Category fetched as: ' . $category);
     
     
-    $allowedCategories = ['وجبات رئيسية', 'مشروبات', 'حلويات', 'مقبلات'];
+    $allowedCategories = ['Main_course', 'مشروبات', 'حلويات', 'مقبلات'];
 
     
     if (!in_array($category, $allowedCategories)) {
