@@ -102,17 +102,17 @@ class MealController extends Controller
     $category = $request->query('category');
     Log::info('Category fetched as: ' . $category);
     
-    // Define allowed categories
+    
     $allowedCategories = ['وجبات رئيسية', 'مشروبات', 'حلويات', 'مقبلات'];
 
-    // Validate the category
+    
     if (!in_array($category, $allowedCategories)) {
         return response()->json([
             'error' => 'Invalid category selected.'
         ], 422);
     }
 
-    // Retrieve meals by category across all kitchens
+    
     $meals = Meal::where('category', $category)
                  ->with('kitchen')
                  ->paginate(10);
