@@ -103,9 +103,8 @@ class MealController extends Controller
         Log::info('Category fetched as: ' . $category);
 
     
-        // Select only the required columns
         $meals = Meal::where('category', $category)
-                     ->select('id', 'name', 'description', 'price', 'kitchen_id') // Add or remove columns as needed
+                     ->select('id', 'name', 'description', 'price', 'kitchen_id', 'meal_image')
                      ->get();
     
         return response()->json($meals);
