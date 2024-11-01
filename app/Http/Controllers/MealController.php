@@ -98,24 +98,19 @@ class MealController extends Controller
     }
 
     public function getMealsByCategory(Request $request)
-{    
-    $category = $request->input('category');
-    Log::info('Category fetched as: ' . $category);
-    
-    
-    
-    // if (!in_array($category, ['وجبات رئيسية', 'مشروبات', 'حلويات', 'مقبلات'])) {
-    //     return response()->json(['error' => 'Invalid category selected.'], 400);
-    // }
-    
+    {    
+        $category = $request->input('category');
+        Log::info('Category fetched as: ' . $category);
 
     
-    $meals = Meal::where('category', $category)
-                 ->with('kitchen')
-                 ->get();
-
-    return response()->json($meals);
-}
+        // Select only the required columns
+        $meals = Meal::where('category', $category)
+                     ->select('id', 'name', 'description', 'price', 'kitchen_id') // Add or remove columns as needed
+                     ->get();
+    
+        return response()->json($meals);
+    }
+    
 
     
 
