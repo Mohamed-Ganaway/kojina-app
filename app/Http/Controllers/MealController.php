@@ -104,8 +104,8 @@ class MealController extends Controller
 
     
         $meals = Meal::where('category', $category)
-                     ->select('id', 'name', 'description', 'price', 'kitchen_id', 'meal_image')
-                     ->get();
+                 ->select('id', 'meal_name', 'meal_description', 'price', 'kitchen_id', 'meal_image')
+                 ->get();
     
         return response()->json($meals);
     }
